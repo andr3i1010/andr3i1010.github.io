@@ -1,11 +1,13 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// Get the user's preferred language from the Accept-Language header
+const acceptLanguage = Astro.request.headers.get('accept-language') || '';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Check if Dutch is one of the preferred languages
+const isDutch = acceptLanguage.toLowerCase().includes('nl');
+
+// Determine the redirect path based on locale
+const redirectPath = isDutch ? '/nl' : '/en';
+
+// Return a redirect response
+return Astro.redirect(redirectPath);
 ---
-
-<Layout>
-	<Welcome />
-</Layout>
