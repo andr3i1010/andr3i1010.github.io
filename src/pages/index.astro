@@ -1,13 +1,43 @@
 ---
-// Get the user's preferred language from the Accept-Language header
-const acceptLanguage = Astro.request.headers.get('accept-language') || '';
-
-// Check if Dutch is one of the preferred languages
-const isDutch = acceptLanguage.toLowerCase().includes('nl');
-
-// Determine the redirect path based on locale
-const redirectPath = isDutch ? '/nl' : '/en';
-
-// Return a redirect response
-return Astro.redirect(redirectPath);
+// Static page with client-side redirection
 ---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta http-equiv="refresh" content="0;url=/en" /> <!-- Default fallback redirect -->
+    <link rel="canonical" href="/en" />
+    <script type="text/javascript">
+      // Immediately executed language detection
+      (function() {
+        try {
+          // Check if Dutch is a preferred language
+          const isDutch = (navigator.language || '').toLowerCase().startsWith('nl') || 
+                         (navigator.languages || []).some(lang => lang.toLowerCase().startsWith('nl'));
+          
+          // Set canonical and redirect
+          const targetPath = isDutch ? '/nl' : '/en';
+          document.querySelector('link[rel="canonical"]').href = targetPath;
+          window.location.replace(targetPath);
+        } catch (e) {
+          // Fallback will happen via meta refresh
+        }
+      })();
+    </script>
+    <style>
+      html, body {
+        display: none;
+        width: 0;
+        height: 0;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body></body>
+</html>

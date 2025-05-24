@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://andrei1010.me',
   base: '/',
+  output: 'static', // Use static output for GitHub Pages
 
   server: {
     host: true,
@@ -14,7 +15,7 @@ export default defineConfig({
   },
 
   integrations: [
-      react(),
+    react(),
   ],
 
   vite: {
